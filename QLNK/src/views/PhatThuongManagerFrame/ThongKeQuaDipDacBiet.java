@@ -1,0 +1,390 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package views.PhatThuongManagerFrame;
+
+import java.awt.Font;
+import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import models.HoKhauModel;
+import services.MysqlConnection;
+
+/**
+ *
+ * @author oOOo
+ */
+public class ThongKeQuaDipDacBiet extends javax.swing.JFrame {
+
+    private DefaultTableModel tblModel;
+    private DefaultTableModel tblModel1;
+    private JFrame parentJFrame;
+    private JFrame parentFrame;
+
+    /**
+     * Creates new form ThongKeQuaDipDacBiet
+     */
+    public ThongKeQuaDipDacBiet(JFrame parentJFrame) {
+        initComponents();
+        initTableModel();
+        initTableModel1();
+        this.parentJFrame = parentJFrame;
+        parentJFrame.setEnabled(false);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                parentJFrame.setEnabled(true);
+                close();
+            }
+        });
+        initComboBox();
+
+    }
+
+    private void initTableModel() {
+        String[] columnNames = new String[]{"STT", "ID hộ", "Số quà đã nhận", "Tổng giá trị"};
+        tblModel = new DefaultTableModel();
+        tblModel.setColumnIdentifiers(columnNames);
+        tblthongke.setModel(tblModel);
+
+        //tblModel= (DefaultTableModel) tblthongke.getModel();
+        tblthongke.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        tblthongke.setRowHeight(30);
+        tblthongke.validate();
+        tblthongke.repaint();
+        tblthongke.setFont(new Font("Arial", Font.PLAIN, 14));
+        tblthongke.getColumnModel().getColumn(0).setMaxWidth(40);
+        tblthongke.getColumnModel().getColumn(0).setMinWidth(40);
+        tblthongke.getColumnModel().getColumn(0).setPreferredWidth(80);
+    }
+
+    private void initTableModel1() {
+        String[] columnNames = new String[]{"STT", "ID Hộ Khẩu", "ID nhân khẩu", "Tên nhân khẩu", "Phần quà", "Giá trị"};
+        tblModel1 = new DefaultTableModel();
+        tblModel1.setColumnIdentifiers(columnNames);
+        tblchitiet.setModel(tblModel1);
+        //tblModel= (DefaultTableModel) tblthongke.getModel();
+        tblchitiet.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        tblchitiet.setRowHeight(28);
+        tblchitiet.validate();
+        tblchitiet.repaint();
+        tblchitiet.setFont(new Font("Arial", Font.PLAIN, 12));
+        tblchitiet.getColumnModel().getColumn(0).setMaxWidth(40);
+        tblchitiet.getColumnModel().getColumn(0).setMinWidth(40);
+        tblchitiet.getColumnModel().getColumn(0).setPreferredWidth(80);
+
+    }
+
+    private void close() {
+        if (JOptionPane.showConfirmDialog(this, "Are you sure to close??", "Confirm", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            this.parentJFrame.setEnabled(true);
+            dispose();
+        }
+    }
+
+    private void initComboBox() {
+        Connection conn = null;
+        Statement stm = null;
+        try {
+            conn = MysqlConnection.getMysqlConnection();
+            String sql = "select tenDipDacBiet from dip_dac_biet";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            boxDip.removeAllItems();
+            boxDip.addItem("Chọn dịp phát quà");
+            while (rs.next()) {
+                boxDip.addItem(rs.getString("tenDipDacBiet"));
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private int idDip(String dip) {
+        int idDip = -1;
+        Connection conn = null;
+        Statement stm = null;
+        try {
+            conn = MysqlConnection.getMysqlConnection();
+            String sql = "select ID, tenDipDacBiet from dip_dac_biet";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("tenDipDacBiet").equals(dip)) {
+                    idDip = rs.getInt("ID");
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return idDip;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblthongke = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        btnthongke = new javax.swing.JButton();
+        btnchitiet = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblchitiet = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        txtTimkiem = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        boxDip = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tblthongke.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "STT", "ID hộ", "Tổng số quà đã nhận", "Tổng giá trị"
+            }
+        ));
+        tblthongke.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblthongkeMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblthongke);
+        if (tblthongke.getColumnModel().getColumnCount() > 0) {
+            tblthongke.getColumnModel().getColumn(0).setMinWidth(50);
+            tblthongke.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 500, 110));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel1.setText("Bảng thống kê số phần quà mỗi hộ đã nhận");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 340, 25));
+
+        btnthongke.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnthongke.setText("Thống Kê");
+        btnthongke.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnthongkeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnthongke, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 60, 100, -1));
+
+        btnchitiet.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnchitiet.setText("Thống Kê Chi Tiết");
+        btnchitiet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnchitietActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnchitiet, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 260, 150, -1));
+
+        tblchitiet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "STT", "ID Hộ Khẩu", "ID nhân khẩu", "Họ Tên", "Phần quà", "Giá trị"
+            }
+        ));
+        jScrollPane2.setViewportView(tblchitiet);
+        if (tblchitiet.getColumnModel().getColumnCount() > 0) {
+            tblchitiet.getColumnModel().getColumn(0).setMinWidth(50);
+            tblchitiet.getColumnModel().getColumn(0).setMaxWidth(50);
+            tblchitiet.getColumnModel().getColumn(1).setMinWidth(85);
+            tblchitiet.getColumnModel().getColumn(1).setMaxWidth(85);
+            tblchitiet.getColumnModel().getColumn(2).setMinWidth(90);
+            tblchitiet.getColumnModel().getColumn(2).setMaxWidth(90);
+            tblchitiet.getColumnModel().getColumn(4).setMinWidth(90);
+            tblchitiet.getColumnModel().getColumn(4).setMaxWidth(90);
+            tblchitiet.getColumnModel().getColumn(5).setMinWidth(100);
+            tblchitiet.getColumnModel().getColumn(5).setMaxWidth(100);
+        }
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 630, 200));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("ID hộ khẩu cần thống kê:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 180, 30));
+
+        txtTimkiem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtTimkiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 170, 30));
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton1.setText("Close");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 540, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("Dịp phát quà cần thống kê:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 190, -1));
+
+        boxDip.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boxDip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(boxDip, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 180, -1));
+
+        jLabel4.setText("(Nhập hoặc chọn ở bảng phía trên)");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, 200, -1));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel5.setText("Thống kê chi tiết từng hộ");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 340, -1));
+
+        jLabel6.setText("  ");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 330, 10, -1));
+
+        jLabel7.setText("  ");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 560, -1, -1));
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnchitietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnchitietActionPerformed
+        // TODO add your handling code here:
+        Connection conn = null;
+        Statement stm = null;
+        String dipPhatQua = boxDip.getSelectedItem().toString();
+        int idDipDacBiet = this.idDip(dipPhatQua);
+        String id = Integer.toString(idDipDacBiet);
+
+        try {
+            conn = MysqlConnection.getMysqlConnection();
+            if (txtTimkiem.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ban chua nhap gia tri tim kiem");
+            } else {
+                String sql1 = "select t.idHoKhau, p.IDHS, n.hoTen, pt.tenQua, pt.giaTri "
+                        + "from thanh_vien_cua_ho t,nhan_khau n, pt_dip_dac_biet p,phan_qua pt "
+                        + "where t.idNhanKhau = p.IDHS and t.idNhanKhau = n.ID "
+                        + "and p.IDPhanQua = pt.ID and idHoKhau = " + txtTimkiem.getText() + " "
+                        + "and idDipDacBiet = " + id + "";
+
+                PreparedStatement pstmt = conn.prepareStatement(sql1);
+
+                ResultSet rs1 = pstmt.executeQuery();
+
+                tblModel1.setRowCount(0);
+                while (rs1.next()) {
+                    tblModel1.addRow(new Object[]{
+                        tblModel1.getRowCount() + 1,
+                        rs1.getInt("idHoKhau"),
+                        rs1.getInt("IDHS"),
+                        rs1.getString("hoTen"),
+                        rs1.getString("tenQua"),
+                        rs1.getInt("giaTri"),});
+                }
+
+                tblModel1.fireTableDataChanged();
+            }
+        } catch (HeadlessException | ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnchitietActionPerformed
+
+    private void btnthongkeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthongkeActionPerformed
+        // TODO add your handling code here:
+        Connection conn = null;
+        Statement stm = null;
+
+        String dipPhatQua = boxDip.getSelectedItem().toString();
+        int idDipDacBiet = this.idDip(dipPhatQua);
+        String id = Integer.toString(idDipDacBiet);
+
+        try {
+            conn = MysqlConnection.getMysqlConnection();
+            if ("Chọn dịp phát quà".equals(dipPhatQua)) {
+                JOptionPane.showMessageDialog(this, "Chọn dịp phát quà cần thống kê");
+            } else {
+                String sql = "select idHoKhau, count(IDPhanQua) as sophanthuong, count(IDPhanQua)*10000 as sotienqua "
+                        + "from nhan_khau n, thanh_vien_cua_ho t, pt_dip_dac_biet p "
+                        + "where t.idNhanKhau = n.id and n.ID = p.IDHS and idDipDacBiet = " + id + " group by idHoKhau";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+                tblModel.setRowCount(0);
+                while (rs.next()) {
+                    tblModel.addRow(new Object[]{
+                        tblModel.getRowCount() + 1,
+                        rs.getString("idHoKhau"),
+                        rs.getInt("sophanthuong"),
+                        rs.getInt("sotienqua"),});
+                }
+                tblModel.fireTableDataChanged();
+            }
+        } catch (HeadlessException | ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnthongkeActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        close();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tblthongkeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblthongkeMouseClicked
+        // TODO add your handling code here:
+        int selectIndex = tblthongke.getSelectedRow();
+        if (selectIndex >= 0) {
+            String id = String.valueOf(tblthongke.getValueAt(selectIndex, 1));     
+            txtTimkiem.setText(id);
+        }
+    }//GEN-LAST:event_tblthongkeMouseClicked
+
+/**
+ * @param args the command line arguments
+ */
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> boxDip;
+    private javax.swing.JButton btnchitiet;
+    private javax.swing.JButton btnthongke;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblchitiet;
+    private javax.swing.JTable tblthongke;
+    private javax.swing.JTextField txtTimkiem;
+    // End of variables declaration//GEN-END:variables
+}
